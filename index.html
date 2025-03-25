@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Price Predictor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        #main {
+            width: 1500px;
+            height: 300px;
+            margin-top: 1px;
+        }
+        #main img {
+            height: 600px;
+            width: 1525px;
+            display: none;
+            position: relative;
+        }
+        h3 {
+            position: absolute;
+            top: 45%;
+            left: 35%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 2rem;
+            font-family: Arial, sans-serif;
+            padding: 10px 20px;
+        }
+
+        #header {
+            height: 50px;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: end;
+        }
+
+        nav ul li {
+            margin: 0 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: rgb(22, 18, 18);
+            font-size: 1.2rem;
+            font-weight: bold;
+            position: relative;
+            padding-bottom: 5px;
+            transition: color 0.3s;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            background-color: #d51967;
+            height: 2px;
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+       
+        .moon-btn {
+            background-color: #2c3e50;
+            color: #fff;
+            border: 2px solid transparent;
+            padding: 0px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+        }
+
+        .moon-btn:hover {
+            background-color: #081063;
+            border-color: #093a5a;
+            transform: scale(1.1);
+        }
+
+      
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 400px;
+            border-radius: 10px;
+        }
+
+        .close-btn {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            cursor: pointer;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        footer {
+            background-color: #575757;
+            color: white;
+            text-align: center;
+            padding: 12px 0;
+            position: relative;
+            top:250px;
+            width: 100%;
+            height:50px;
+            
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form input {
+            margin: 10px 0;
+            padding: 8px;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        form button {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #2980b9;
+        }
+
+        .login-btn {
+            color: black;
+            font-size: 16px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .login-btn::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .login-btn:hover::after {
+            width: 100%;
+        }
+
+        .login-btn:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="head1">
+        <div id="header">
+            
+            <nav>
+                <ul>
+                   
+                    <li><a href="#">Home</a></li>
+                    <li><a href="stock.html">Predict Stock Price</a></li>
+                    <li><button class="login-btn">Login</button></li>
+                    <li>
+                        <button class="moon-btn">
+                            <i class="fa-solid fa-moon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <h2 align="center">Login</h2>
+                <br>
+                <form id="loginForm">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                    <label for="username">Email:</label>
+                    <input type="email" id="username" name="username" required>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required><br>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="main">
+            <img src="cec89c1ffaa0a6ccf05b8561f504bd2f.jpg">
+            <h3>Unlock the Future of Your Investments: Predict Stock Prices with Confidence</h3>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2025 Stock Price Predictor. All Rights Reserved.</p>
+        <p>Developed by Niharika</p>
+    </footer>
+
+    <script>
+        let u = document.querySelectorAll("#main img");
+        let ci = 0;
+
+        function slide() {
+            u[ci].style.display = 'none';
+            ci = (ci + 1) % u.length;
+            u[ci].style.display = 'block';
+        }
+
+        u[ci].style.display = 'block';
+        setInterval(slide, 3000);
+
+        let o = document.getElementsByClassName('moon-btn')[0];
+        let i = 1;
+        o.addEventListener('click', () => {
+            let links = document.querySelectorAll('a');
+            if (i) {
+                document.body.style.backgroundColor = "black";
+                links.forEach(links => {
+                    links.style.color = "white";
+                });
+                o.innerHTML = '<i class="fa-solid fa-sun"></i>';
+                i = 0;
+            } else {
+                document.body.style.backgroundColor = "white";
+                links.forEach(links => {
+                    links.style.color = "black";
+                });
+                o.innerHTML = '<i class="fa-solid fa-moon"></i>';
+                i = 1;
+            }
+        });
+
+      
+        let loginModal = document.getElementById("loginModal");
+        let loginBtn = document.querySelector(".login-btn");
+        let closeBtn = document.querySelector(".close-btn");
+
+       
+        loginBtn.addEventListener("click", () => {
+            loginModal.style.display = "block";
+        });
+
+        
+        closeBtn.addEventListener("click", () => {
+            loginModal.style.display = "none";
+        });
+
+        
+        window.addEventListener("click", (event) => {
+            if (event.target === loginModal) {
+                loginModal.style.display = "none";
+            }
+        });
+
+        
+        document.getElementById("loginForm").addEventListener("submit", (event) => {
+            event.preventDefault(); 
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            console.log("Username:", username, "Password:", password);
+           
+            loginModal.style.display = "none"; 
+        });
+    </script>
+
+</body>
+</html>
